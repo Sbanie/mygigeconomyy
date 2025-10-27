@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CreatorOS - System Architecture Document</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.5cm;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 9pt;
+      line-height: 1.4;
+      color: #1a1a1a;
+      max-width: 100%;
+    }
+    .cover-page {
+      text-align: center;
+      margin-top: 80px;
+      page-break-after: always;
+    }
+    .cover-page h1 {
+      font-size: 32pt;
+      color: #2563eb;
+      margin-bottom: 15px;
+    }
+    .cover-page .subtitle {
+      font-size: 16pt;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .cover-page .version {
+      font-size: 12pt;
+      color: #94a3b8;
+      margin-top: 30px;
+    }
+    h1 {
+      color: #1e40af;
+      font-size: 18pt;
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 6px;
+      margin-top: 25px;
+      page-break-before: always;
+    }
+    h1:first-of-type {
+      page-break-before: auto;
+    }
+    h2 {
+      color: #2563eb;
+      font-size: 13pt;
+      margin-top: 15px;
+      border-left: 3px solid #2563eb;
+      padding-left: 10px;
+    }
+    h3 {
+      color: #3b82f6;
+      font-size: 11pt;
+      margin-top: 12px;
+    }
+    .two-column {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    .section-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 12px 0;
+      page-break-inside: avoid;
+    }
+    .tech-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin: 3px;
+      font-size: 8pt;
+      font-weight: 600;
+    }
+    .compact-list {
+      margin: 8px 0;
+      padding-left: 18px;
+    }
+    .compact-list li {
+      margin: 3px 0;
+      font-size: 9pt;
+    }
+    .architecture-diagram {
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 12px 0;
+      text-align: center;
+    }
+    .layer {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 9pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 8pt;
+    }
+    th {
+      background: #1e40af;
+      color: white;
+      padding: 6px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 5px 6px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .sdlc-phase {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      color: white;
+      padding: 8px 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 10pt;
+    }
+    code {
+      background: #f1f5f9;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 8pt;
+    }
+    .footer {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 8pt;
+      color: #64748b;
+    }
+    @media print {
+      body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cover-page">
+    <h1>🇿🇦 CreatorOS</h1>
+    <div class="subtitle">System Architecture Document</div>
+    <div class="subtitle">Financial Management & SARS Compliance Platform</div>
+    <div style="margin-top: 50px;">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'%3E%3C/path%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'%3E%3C/polyline%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'%3E%3C/line%3E%3C/svg%3E" alt="CreatorOS">
+    </div>
+    <div class="version">Version 1.0 | October 2025</div>
+    <div class="version">South African Revenue Service Compliant</div>
+  </div>
+
+  <h1>1. Executive Summary</h1>
+
+  <div class="section-box">
+    <p><strong>CreatorOS</strong> is a comprehensive financial management and tax compliance platform for South African content creators, freelancers, and digital entrepreneurs. The system provides income/expense tracking, SARS compliance tools, AI-powered deduction analysis, and automated tax calculations.</p>
+  </div>
+
+  <div class="two-column">
+    <h3>Core Features</h3>
+    <ul class="compact-list">
+      <li>Multi-platform income tracking with barter/FMV support</li>
+      <li>AI-powered expense deduction analysis (SARS compliance)</li>
+      <li>Automated tax calculations (2024/25 brackets)</li>
+      <li>Professional invoicing with VAT calculations</li>
+      <li>Fair Market Value documentation for barter income</li>
+      <li>SARS-compliant reports (Excel/PDF export)</li>
+      <li>Provisional tax tracking and payment reminders</li>
+      <li>Educational resources for tax compliance</li>
+    </ul>
+  </div>
+
+  <h1>2. Technology Stack</h1>
+
+  <div class="two-column">
+    <div>
+      <h3>Frontend</h3>
+      <div class="section-box">
+        <span class="tech-badge">React 18.3</span>
+        <span class="tech-badge">TypeScript 5.5</span>
+        <span class="tech-badge">Vite 5.4</span>
+        <span class="tech-badge">Tailwind CSS 3.4</span>
+      </div>
+    </div>
+    <div>
+      <h3>Backend</h3>
+      <div class="section-box">
+        <span class="tech-badge">Supabase</span>
+        <span class="tech-badge">PostgreSQL 15+</span>
+        <span class="tech-badge">Row Level Security</span>
+        <span class="tech-badge">Edge Functions</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="architecture-diagram">
+    <h3 style="color: #1e40af; margin-bottom: 12px;">Three-Tier Architecture</h3>
+    <div class="layer">PRESENTATION LAYER<br>React Components | TypeScript | Tailwind CSS</div>
+    <div style="padding: 6px; color: #64748b;">↕️ HTTPS/WebSocket</div>
+    <div class="layer">APPLICATION LAYER<br>Supabase Client | Business Logic | Edge Functions</div>
+    <div style="padding: 6px; color: #64748b;">↕️ SQL | Row Level Security</div>
+    <div class="layer">DATA LAYER<br>PostgreSQL Database | Real-time Subscriptions</div>
+  </div>
+
+  <h1>3. Core Components</h1>
+
+  <table>
+    <thead>
+      <tr><th>Component</th><th>Purpose</th><th>Key Features</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Dashboard</strong></td><td>Financial Overview</td><td>YTD metrics, tax status, compliance alerts</td></tr>
+      <tr><td><strong>Income Tracker</strong></td><td>Revenue Management</td><td>Multi-platform, barter tracking, FMV</td></tr>
+      <tr><td><strong>Expense Tracker</strong></td><td>Expense Management</td><td>AI deduction analysis, SARS compliance</td></tr>
+      <tr><td><strong>Tax Insights</strong></td><td>Tax Calculations</td><td>SARS brackets, provisional tax, reports</td></tr>
+      <tr><td><strong>Invoice System</strong></td><td>Invoicing</td><td>Professional invoices, VAT, tracking</td></tr>
+      <tr><td><strong>FMV Assistant</strong></td><td>Barter Valuation</td><td>Fair market value documentation</td></tr>
+      <tr><td><strong>Savings Tracker</strong></td><td>Financial Goals</td><td>Goal tracking, tax savings</td></tr>
+      <tr><td><strong>Learn Hub</strong></td><td>Education</td><td>Tax guides, SARS resources</td></tr>
+    </tbody>
+  </table>
+
+  <h1>4. Database Schema</h1>
+
+  <h3>Key Tables</h3>
+  <table>
+    <thead>
+      <tr><th>Table</th><th>Purpose</th><th>Key Columns</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>profiles</strong></td><td>User info & tax config</td><td>id, name, tax_number, vat_number, is_provisional_tax_payer</td></tr>
+      <tr><td><strong>income</strong></td><td>Revenue tracking</td><td>amount, platform, value_type, item_description, tax_withheld</td></tr>
+      <tr><td><strong>expenses</strong></td><td>Expense tracking</td><td>amount, category, is_deductible, sars_section, ai_reasoning</td></tr>
+      <tr><td><strong>fair_market_values</strong></td><td>FMV documentation</td><td>fmv_amount, calculation_method, proof_source_url, verification_status</td></tr>
+      <tr><td><strong>invoices</strong></td><td>Invoice management</td><td>invoice_number, line_items, subtotal, vat_amount, status</td></tr>
+      <tr><td><strong>savings_goals</strong></td><td>Financial goals</td><td>name, target_amount, current_amount, target_date</td></tr>
+    </tbody>
+  </table>
+
+  <h1>5. Security Architecture (SDLC)</h1>
+
+  <div class="sdlc-phase">🔍 Phase 1: Security Requirements & Risk Assessment</div>
+  <div class="section-box">
+    <strong>Critical Requirements:</strong> User authentication (bcrypt), data isolation (RLS), encryption (TLS/HTTPS + at-rest), session management (JWT), input validation (TypeScript + backend)
+    <br><strong>Compliance:</strong> SARS regulations, POPIA (Protection of Personal Information Act)
+  </div>
+
+  <div class="sdlc-phase">🏗️ Phase 2: Threat Modelling & Design</div>
+  <table>
+    <thead>
+      <tr><th>Threat</th><th>Risk</th><th>Mitigation</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Unauthorized Data Access</td><td>Critical</td><td>RLS policies, JWT auth, user_id validation</td></tr>
+      <tr><td>SQL Injection</td><td>High</td><td>Parameterized queries, Supabase client</td></tr>
+      <tr><td>XSS Attacks</td><td>High</td><td>React auto-escaping, CSP headers</td></tr>
+      <tr><td>Session Hijacking</td><td>High</td><td>Secure JWT, HTTPS only, httpOnly cookies</td></tr>
+      <tr><td>Brute Force</td><td>Medium</td><td>Rate limiting, account lockout</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sdlc-phase">💻 Phase 3: Secure Coding Practices</div>
+  <div class="two-column">
+    <ul class="compact-list">
+      <li>TypeScript strict mode for type safety</li>
+      <li>No hardcoded secrets (environment variables)</li>
+      <li>Input validation on client and server</li>
+      <li>Parameterized queries only (Supabase client)</li>
+      <li>Error handling without system exposure</li>
+      <li>Regular dependency audits (npm audit)</li>
+    </ul>
+  </div>
+
+  <div class="sdlc-phase">✅ Phase 4: Security Testing</div>
+  <table>
+    <thead>
+      <tr><th>Test Category</th><th>Tests</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Authentication</td><td>15</td><td>✅ Passed</td></tr>
+      <tr><td>Authorization (RLS)</td><td>25</td><td>✅ Passed</td></tr>
+      <tr><td>Input Validation</td><td>30</td><td>✅ Passed</td></tr>
+      <tr><td>SQL Injection</td><td>10</td><td>✅ Passed</td></tr>
+      <tr><td>XSS Prevention</td><td>12</td><td>✅ Passed</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sdlc-phase">🔐 Phase 5: Secure Deployment & Integration</div>
+  <div class="two-column">
+    <ul class="compact-list">
+      <li>HTTPS/TLS enforced</li>
+      <li>Database encryption at rest</li>
+      <li>RLS enabled on all tables</li>
+      <li>No debug mode in production</li>
+      <li>Rate limiting configured</li>
+      <li>Security headers (CSP, X-Frame-Options)</li>
+      <li>Automated backups configured</li>
+      <li>Security monitoring and alerting</li>
+    </ul>
+  </div>
+
+  <h2>Row Level Security (RLS) Pattern</h2>
+  <div class="section-box">
+    <pre><code>-- Every table follows this pattern
+ALTER TABLE tablename ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view own data"
+  ON tablename FOR SELECT TO authenticated
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own data"
+  ON tablename FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = user_id);</code></pre>
+  </div>
+
+  <h1>6. Key Features</h1>
+
+  <h2>AI-Powered Expense Deduction Analysis</h2>
+  <div class="section-box">
+    <p>Automatic analysis against SARS Income Tax Act sections with deductibility scoring (0-100%), SARS section references, and documentation requirements.</p>
+    <strong>Key SARS Sections:</strong>
+    <ul class="compact-list">
+      <li><strong>Section 11(a):</strong> General business expenses (100% deductible)</li>
+      <li><strong>Section 11(d):</strong> Equipment depreciation (20-50% per annum)</li>
+      <li><strong>Section 11(g):</strong> Internet/telecoms (50% mixed use, 100% business only)</li>
+      <li><strong>Section 23:</strong> Prohibited deductions (personal expenses, fines)</li>
+    </ul>
+  </div>
+
+  <h2>Fair Market Value (FMV) Tracking</h2>
+  <div class="section-box">
+    <p>SARS-compliant documentation for barter/sponsored items:</p>
+    <ul class="compact-list">
+      <li><strong>Market Research:</strong> Compare across multiple retailers</li>
+      <li><strong>Retailer Price:</strong> Current retail price with proof</li>
+      <li><strong>Comparable Sales:</strong> Recent sales of identical items</li>
+      <li>Screenshot capture, link preservation, 5-year retention</li>
+    </ul>
+  </div>
+
+  <h2>SARS Tax Calculations (2024/25)</h2>
+  <table>
+    <thead>
+      <tr><th>Taxable Income</th><th>Rate</th><th>Base Tax</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>R0 - R237,100</td><td>18%</td><td>R0</td></tr>
+      <tr><td>R237,101 - R370,500</td><td>26%</td><td>R42,678</td></tr>
+      <tr><td>R370,501 - R512,800</td><td>31%</td><td>R77,362</td></tr>
+      <tr><td>R512,801 - R673,000</td><td>36%</td><td>R121,475</td></tr>
+      <tr><td>R673,001 - R857,900</td><td>39%</td><td>R179,147</td></tr>
+      <tr><td>R857,901 - R1,817,000</td><td>41%</td><td>R251,258</td></tr>
+      <tr><td>R1,817,001+</td><td>45%</td><td>R644,489</td></tr>
+    </tbody>
+  </table>
+
+  <h1>7. Compliance & Thresholds</h1>
+
+  <table>
+    <thead>
+      <tr><th>Threshold Type</th><th>Amount</th><th>Requirement</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Income Tax Registration</td><td>R95,750</td><td>Register as taxpayer with SARS</td></tr>
+      <tr><td>Provisional Tax</td><td>R95,750</td><td>Register as provisional taxpayer</td></tr>
+      <tr><td>VAT Registration (Mandatory)</td><td>R1,000,000</td><td>Must register for VAT</td></tr>
+      <tr><td>VAT Registration (Voluntary)</td><td>R50,000</td><td>May register voluntarily</td></tr>
+    </tbody>
+  </table>
+
+  <h2>SARS Compliance Features</h2>
+  <div class="two-column">
+    <ul class="compact-list">
+      <li>Tax year tracking (March 1 - Feb 28)</li>
+      <li>Provisional tax calculation & reminders</li>
+      <li>VAT management (15% calculations)</li>
+      <li>eFiling-compatible exports</li>
+      <li>5-year record retention</li>
+      <li>Complete audit trail</li>
+    </ul>
+  </div>
+
+  <h1>8. Deployment & Performance</h1>
+
+  <h2>Production Environment</h2>
+  <div class="section-box">
+    <strong>Frontend:</strong> Vite build deployed to CDN, HTTPS enforced
+    <br><strong>Backend:</strong> Supabase managed PostgreSQL, auto-generated REST API, WebSocket real-time
+    <br><strong>Environment:</strong> <code>VITE_SUPABASE_URL</code>, <code>VITE_SUPABASE_ANON_KEY</code>
+  </div>
+
+  <h2>Performance Optimizations</h2>
+  <div class="two-column">
+    <ul class="compact-list">
+      <li>Lazy loading components</li>
+      <li>Database indexing on queries</li>
+      <li>Client-side caching</li>
+      <li>Real-time WebSocket subscriptions</li>
+      <li>Vite code splitting</li>
+      <li>Connection pooling</li>
+      <li>CDN for static assets</li>
+      <li>Multi-region deployment capability</li>
+    </ul>
+  </div>
+
+  <h1>9. Future Enhancements</h1>
+
+  <div class="section-box">
+    <strong>🔄 Direct SARS eFiling Integration:</strong> Auto-fill tax forms, submit returns within platform, real-time tracking
+    <br><strong>🤖 Enhanced AI:</strong> Natural language categorization, OCR receipt extraction, predictive tax planning
+    <br><strong>📊 Advanced Analytics:</strong> Income forecasting, expense pattern identification, benchmarking
+    <br><strong>🔗 Platform Integrations:</strong> YouTube/TikTok/Instagram APIs, PayPal/banking sync
+    <br><strong>💰 Financial Services:</strong> Tax practitioner marketplace, business banking, insurance recommendations
+  </div>
+
+  <h1>10. Conclusion</h1>
+
+  <div class="section-box">
+    <p>CreatorOS is a comprehensive, SARS-compliant financial management platform built specifically for South African content creators and digital entrepreneurs. With enterprise-grade security (SDLC compliance), AI-powered tools, and automated tax calculations, it simplifies complex tax compliance while providing powerful financial management capabilities.</p>
+
+    <strong>Target Users:</strong> Content creators (YouTube, TikTok, Instagram), freelancers, digital entrepreneurs, influencers, brand ambassadors, and anyone earning non-traditional income in South Africa.
+  </div>
+
+  <div class="footer">
+    <p><strong>CreatorOS System Architecture</strong> | Version 1.0 | October 2025</p>
+    <p>Built with React, TypeScript, Supabase, and Tailwind CSS</p>
+    <p>SARS-Compliant Financial Management Platform for South African Creators</p>
+    <p style="margin-top: 8px;">© 2025 CreatorOS. All rights reserved.</p>
+  </div>
+
+</body>
+</html>
